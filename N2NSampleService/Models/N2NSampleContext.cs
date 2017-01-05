@@ -23,6 +23,9 @@ namespace N2NSample.Service.Models
         } 
 
         public DbSet<TodoItem> TodoItems { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<StudentCourse> StudentCourses { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

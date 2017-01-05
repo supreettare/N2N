@@ -9,6 +9,7 @@ using Microsoft.Azure.Mobile.Server.Config;
 using N2NSample.Service.DataObjects;
 using N2NSample.Service.Models;
 using Owin;
+using Swashbuckle.Application;
 
 namespace N2NSample.Service
 {
@@ -24,6 +25,11 @@ namespace N2NSample.Service
             new MobileAppConfiguration()
                 .UseDefaultConfiguration()
                 .ApplyTo(config);
+
+            config.EnableSwagger(c =>
+            {
+                c.SingleApiVersion("v1", "N2NSample.Service");
+            }).EnableSwaggerUi(c => { });
 
             // Use Entity Framework Code First to create database tables based on your DbContext
             Database.SetInitializer(new N2NSampleInitializer());
@@ -49,7 +55,7 @@ namespace N2NSample.Service
         }
     }
 
-    public class N2NSampleInitializer : CreateDatabaseIfNotExists<N2NSampleContext>
+    public class N2NSampleInitializer : DropCreateDatabaseAlways<N2NSampleContext>//CreateDatabaseIfNotExists<N2NSampleContext>
     {
         protected override void Seed(N2NSampleContext context)
         {

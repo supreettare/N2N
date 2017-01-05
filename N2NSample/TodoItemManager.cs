@@ -38,7 +38,8 @@ namespace N2NSample
 
         private TodoItemManager()
         {
-            this.client = new MobileServiceClient(Constants.ApplicationURL);
+            //this.client = new MobileServiceClient(Constants.ApplicationURL);
+            this.client = new MobileServiceClient("http://192.168.5.134:51285/");
 
 #if OFFLINE_SYNC_ENABLED
             var store = new MobileServiceSQLiteStore(offlineDbPath);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.WindowsAzure.MobileServices;
+using System;
 
 using Xamarin.Forms;
 
@@ -6,7 +7,10 @@ namespace N2NSample
 {
 	public class App : Application
 	{
-		public App ()
+        //MobileServiceClient client = new MobileServiceClient(Constants.ApplicationURL);
+        MobileServiceClient client = new MobileServiceClient(Constants.ApplicationURL);
+
+        public App ()
 		{
 			// The root page of your application
 			MainPage = new TodoList();
