@@ -1,4 +1,5 @@
 ﻿using Microsoft.WindowsAzure.MobileServices;
+using N2NSample.Views;
 using System;
 
 using Xamarin.Forms;
@@ -7,13 +8,10 @@ namespace N2NSample
 {
 	public class App : Application
 	{
-        //MobileServiceClient client = new MobileServiceClient(Constants.ApplicationURL);
-        MobileServiceClient client = new MobileServiceClient(Constants.ApplicationURL);
-
         public App ()
 		{
 			// The root page of your application
-			MainPage = new TodoList();
+			MainPage = new StudentsPage();
 		}
 
 		protected override void OnStart ()

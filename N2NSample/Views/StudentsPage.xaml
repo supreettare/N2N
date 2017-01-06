@@ -3,17 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="N2NSample.Views.StudentsPage"
              Title="ListView">
-  <ListView ItemsSource="{Binding ItemsGrouped}"
-            ItemTapped="Handle_ItemTapped"
-            ItemSelected="Handle_ItemSelected"
-            HasUnevenRows="true"
-            GroupShortNameBinding="{Binding Key}"
+    <!--ItemSelected="Handle_ItemSelected"
+      GroupShortNameBinding="{Binding Key}"
             IsGroupingEnabled="true"
             GroupDisplayBinding="{Binding Key}"
             IsPullToRefreshEnabled="true"
-            CachingStrategy="RecycleElement"
-            IsRefreshing="{Binding IsBusy, Mode=OneWay}"
-            RefreshCommand="{Binding RefreshDataCommand}">
+    IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+            RefreshCommand="{Binding RefreshDataCommand}"
+    ItemTapped="Handle_ItemTapped"-->
+
+    <ListView ItemsSource="{Binding Students}"
+            HasUnevenRows="true"
+            CachingStrategy="RecycleElement">
     <ListView.Header>
       <StackLayout Padding="10" 
                    Orientation="Horizontal"
@@ -29,8 +30,7 @@
     <!--Built in Cells-->
     <ListView.ItemTemplate>
       <DataTemplate>
-        <TextCell Text="{Binding Text}"
-                  Detail="{Binding Detail}"/>
+        <TextCell Text="{Binding Name}"/>
       </DataTemplate>
     </ListView.ItemTemplate>
     

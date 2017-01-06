@@ -1,4 +1,6 @@
-﻿using System;
+﻿using N2NSample.Helper;
+using N2NSample.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -15,56 +17,69 @@ namespace N2NSample.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class StudentsPage : ContentPage
     {
+        public ObservableCollection<Student> Students { get; set; }
+
         public StudentsPage()
         {
             InitializeComponent();
-            BindingContext = new ListViewPageViewModel();
+            GetStudents(); 
+            BindingContext = this;
         }
 
-        void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
-            => ((ListView)sender).SelectedItem = null;
-
-        async void Handle_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void GetStudents()
         {
-            if (e.SelectedItem == null)
-                return;
-
-            await DisplayAlert("Selected", e.SelectedItem.ToString(), "OK");
-
-            //Deselect Item
-            ((ListView)sender).SelectedItem = null;
+            var students = await ServiceHelperOnline.Instance.GetStudents();
+            Students = new ObservableCollection<Student>(students);
         }
+
+
+        //void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
+        //    => ((ListView)sender).SelectedItem = null;
+
+        //async void Handle_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        //{
+        //    if (e.SelectedItem == null)
+        //        return;
+
+        //    await DisplayAlert("Selected", e.SelectedItem.ToString(), "OK");
+
+        //    //Deselect Item
+        //    ((ListView)sender).SelectedItem = null;
+        //}
     }
 
 
 
     class ListViewPageViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<Item> Items { get; }
-        public ObservableCollection<Grouping<string, Item>> ItemsGrouped { get; }
+        public ObservableCollection<Student> Students { get; set; }
+        public ObservableCollection<Grouping<string, Student>> StudentsGrouped { get; set; }
 
         public ListViewPageViewModel()
         {
-            Items = new ObservableCollection<Item>(new[]
+            try
             {
-                new Item { Text = "Baboon", Detail = "Africa & Asia" },
-                new Item { Text = "Capuchin Monkey", Detail = "Central & South America" },
-                new Item { Text = "Blue Monkey", Detail = "Central & East Africa" },
-                new Item { Text = "Squirrel Monkey", Detail = "Central & South America" },
-                new Item { Text = "Golden Lion Tamarin", Detail= "Brazil" },
-                new Item { Text = "Howler Monkey", Detail = "South America" },
-                new Item { Text = "Japanese Macaque", Detail = "Japan" },
-            });
+                GetStudents();
 
-            var sorted = from item in Items
-                         orderby item.Text
-                         group item by item.Text[0].ToString() into itemGroup
-                         select new Grouping<string, Item>(itemGroup.Key, itemGroup);
+                //RefreshDataCommand = new Command(
+                //    async () => await RefreshData());
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
-            ItemsGrouped = new ObservableCollection<Grouping<string, Item>>(sorted);
+        private async void GetStudents()
+        {
+            var students = await ServiceHelperOnline.Instance.GetStudents();
+            Students = new ObservableCollection<Student>(students);
+            //var sorted = from item in Students
+            //             orderby item.Name
+            //             group item by item.Name[0].ToString() into itemGroup
+            //             select new Grouping<string, Student>(itemGroup.Key, itemGroup);
 
-            RefreshDataCommand = new Command(
-                async () => await RefreshData());
+            //StudentsGrouped = new ObservableCollection<Grouping<string, Student>>(sorted);
         }
 
         public ICommand RefreshDataCommand { get; }
@@ -73,7 +88,7 @@ namespace N2NSample.Views
         {
             IsBusy = true;
             //Load Data Here
-            await Task.Delay(2000);
+            GetStudents(); 
 
             IsBusy = false;
         }
