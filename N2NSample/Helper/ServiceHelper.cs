@@ -314,12 +314,12 @@ namespace N2NSample.Helper
             return tcs.Task.Result;
         }
 
-        public async Task<List<StudentCourse>> GetstudentCourses()
+        public async Task<List<StudentCourse>> GetstudentCourses(string _selectedStudentId)
         {
             TaskCompletionSource<List<StudentCourse>> tcs = new TaskCompletionSource<List<StudentCourse>>();
             try
             {
-                await studentCourseTable.ToListAsync().ContinueWith(t =>
+                await studentCourseTable.Where(x=>x.StudentId== _selectedStudentId).ToListAsync().ContinueWith(t =>
                 {
                     if (t.Status == TaskStatus.RanToCompletion)
                     {

@@ -17,7 +17,18 @@ namespace N2NSample.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class StudentsPage : ContentPage
     {
-        public ObservableCollection<Student> Students { get; set; }
+        //public ObservableCollection<Student> Students { get; set; }
+
+        private ObservableCollection<Student> students;
+
+        public ObservableCollection<Student> Students
+        {
+            get { return students; }
+            set { students = value;
+                OnPropertyChanged(); 
+            }
+        }
+
 
         public StudentsPage()
         {
@@ -26,15 +37,25 @@ namespace N2NSample.Views
             BindingContext = this;
         }
 
+        private async void OnAddStudent(object sender, EventArgs e)
+        {
+            await ServiceHelperOnline.Instance.AddStudent(new Student { Name = txtStudentName.Text });
+            GetStudents(); 
+        }
+        
+
         private async void GetStudents()
         {
             var students = await ServiceHelperOnline.Instance.GetStudents();
             Students = new ObservableCollection<Student>(students);
         }
 
+        async void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            var selectedStudent = ((ListView)sender).SelectedItem as Student;
+            await this.Navigation.PushAsync(new CoursesPage(selectedStudent.Id));
+        }
 
-        //void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
-        //    => ((ListView)sender).SelectedItem = null;
 
         //async void Handle_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         //{

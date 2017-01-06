@@ -11,7 +11,7 @@ namespace N2NSample
         public App ()
 		{
 			// The root page of your application
-			MainPage = new StudentsPage();
+			MainPage = new NavigationPage(new StudentsPage());
 		}
 
 		protected override void OnStart ()
