@@ -6,18 +6,16 @@ using System.Web.Http;
 using Microsoft.Azure.Mobile.Server;
 using Microsoft.Azure.Mobile.Server.Authentication;
 using Microsoft.Azure.Mobile.Server.Config;
-using N2NSample.Service.DataObjects;
-using N2NSample.Service.Models;
+using N2NService.DataObjects;
+using N2NService.Models;
 using Owin;
-using Swashbuckle.Application;
 
-namespace N2NSample.Service
+namespace N2NService
 {
     public partial class Startup
     {
         public static void ConfigureMobileApp(IAppBuilder app)
         {
-            
             HttpConfiguration config = new HttpConfiguration();
 
             //For more information on Web API tracing, see http://go.microsoft.com/fwlink/?LinkId=620686 
@@ -27,16 +25,12 @@ namespace N2NSample.Service
                 .UseDefaultConfiguration()
                 .ApplyTo(config);
 
-            config.EnableSwagger(c =>
-            {
-                c.SingleApiVersion("v1", "N2NSample.Service");
-            }).EnableSwaggerUi(c => { });
-
             // Use Entity Framework Code First to create database tables based on your DbContext
-            Database.SetInitializer(new N2NSampleInitializer());
+            //Database.SetInitializer(new N2NInitializer());
+            Database.SetInitializer<N2NContext>(null);
 
             // To prevent Entity Framework from modifying your database schema, use a null database initializer
-            // Database.SetInitializer<N2NSampleContext>(null);
+            // Database.SetInitializer<N2NContext>(null);
 
             MobileAppSettingsDictionary settings = config.GetMobileAppSettingsProvider().GetMobileAppSettings();
 
@@ -56,9 +50,9 @@ namespace N2NSample.Service
         }
     }
 
-    public class N2NSampleInitializer : DropCreateDatabaseAlways<N2NSampleContext>//CreateDatabaseIfNotExists<N2NSampleContext>
+    public class N2NInitializer : DropCreateDatabaseIfModelChanges<N2NContext>
     {
-        protected override void Seed(N2NSampleContext context)
+        protected override void Seed(N2NContext context)
         {
             List<TodoItem> todoItems = new List<TodoItem>
             {
